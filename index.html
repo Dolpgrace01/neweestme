@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OLB | Zenith Full Catalog</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,800;1,400&family=Montserrat:wght@100;300;600;800&display=swap" rel="stylesheet">
+    <script src="https://js.paystack.co/v1/inline.js"></script>
+    <style>
+        :root {
+            --primary-bg: #F9F9F7;
+            --nav-bg: rgba(255, 255, 255, 0.9);
+            --text-color: #2D1B14;
+            --accent-green: #1B3022;
+            --gold: #C5A059;
+            --card-bg: #FFFFFF;
+            --border: rgba(45, 27, 20, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --primary-bg: #0A0A0A;
+            --nav-bg: rgba(10, 10, 10, 0.95);
+            --text-color: #F9F9F7;
+            --gold: #D4AF37;
+            --card-bg: #141414;
+            --border: rgba(249, 249, 247, 0.05);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; transition: background-color 0.4s, color 0.4s; }
+        body { background-color: var(--primary-bg); color: var(--text-color); font-family: 'Montserrat', sans-serif; }
+
+        /* --- Navigation --- */
+        nav {
+            position: fixed; top: 0; width: 100%; height: 80px;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 5%; background: var(--nav-bg); backdrop-filter: blur(15px);
+            z-index: 9999; border-bottom: 1px solid var(--border);
+        }
+        .logo { font-family: 'Bodoni Moda', serif; font-size: 1.5rem; font-weight: 800; letter-spacing: 3px; }
+        .nav-links a, .nav-links span { cursor: pointer; text-decoration: none; color: var(--text-color); font-size: 0.7rem; font-weight: 600; letter-spacing: 2px; margin-left: 25px; text-transform: uppercase; }
+
+        /* --- Catalog Header --- */
+        .catalog-header {
+            padding: 150px 5% 50px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+        .catalog-header h1 { font-family: 'Bodoni Moda', serif; font-size: clamp(3rem, 8vw, 6rem); font-weight: 800; }
+        .breadcrumb { font-size: 0.7rem; letter-spacing: 3px; color: var(--gold); margin-bottom: 10px; }
+
+        /* --- Section Styling --- */
+        .collection-block { padding: 80px 5%; }
+        .section-details { max-width: 800px; margin-bottom: 60px; }
+        .section-details h2 { font-family: 'Bodoni Moda', serif; font-size: 2.5rem; margin-bottom: 20px; color: var(--gold); }
+        .section-details p { font-weight: 300; line-height: 1.8; opacity: 0.8; }
+        
+        /* --- Grid & Cards --- */
+        .item-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 40px 25px;
+        }
+        .item-card { background: var(--card-bg); border: 1px solid var(--border); padding: 15px; position: relative; }
+        .item-card:hover { border-color: var(--gold); }
+        .item-card img { width: 100%; aspect-ratio: 4/5; object-fit: cover; margin-bottom: 15px; filter: grayscale(20%); }
+        .item-card:hover img { filter: grayscale(0%); }
+        
+        .item-info { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
+        .item-name { font-weight: 600; font-size: 0.9rem; max-width: 70%; }
+        .item-price { color: var(--gold); font-weight: 700; }
+        
+        .add-to-bag {
+            width: 100%; padding: 12px; background: var(--text-color); color: var(--primary-bg);
+            border: none; font-weight: 700; font-size: 0.7rem; letter-spacing: 1px; cursor: pointer;
+        }
+        .add-to-bag:hover { background: var(--gold); color: white; }
+
+        /* --- Cart Panel --- */
+        .cart-panel {
+            position: fixed; right: -400px; top: 0; width: 400px; height: 100vh;
+            background: var(--card-bg); z-index: 10000; padding: 40px;
+            box-shadow: -10px 0 50px rgba(0,0,0,0.1); display: flex; flex-direction: column;
+            transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .cart-panel.active { right: 0; }
+        .cart-items { flex-grow: 1; overflow-y: auto; margin: 20px 0; border-top: 1px solid var(--border); }
+        .cart-item { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid var(--border); font-size: 0.8rem; }
+        .cart-footer { padding-top: 20px; border-top: 2px solid var(--gold); }
+        
+        .checkout-btn { width: 100%; padding: 20px; background: var(--accent-green); color: white; border: none; font-weight: 800; cursor: pointer; }
+
+        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; z-index: 9999; }
+        .overlay.active { display: block; }
+
+        footer { background: var(--accent-green); color: white; padding: 100px 5%; text-align: center; }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">OLB</div>
+        <div class="nav-links">
+            <span onclick="history.back()">← Back</span>
+           
+            <a href="about.html">About </a>
+            <a href="tailoring.html">Tailoring</a>
+            <a href="contact.html">Contact Us</a>
+
+            <span onclick="toggleMode()">Mode</span>
+            <span onclick="toggleCart()" style="color: var(--gold)">Bag (<span id="cart-count">0</span>)</span>
+        </div>
+    </nav>
+
+    <header class="catalog-header">
+        <p class="breadcrumb">ATELIER — GLOBAL — 2026</p>
+        <h1>The Full Gallery</h1>
+        <p style="margin-top: 20px; opacity: 0.6;">A complete inventory of hand-stitched excellence.</p>
+    </header>
+
+    <section class="collection-block">
+        <div class="section-details">
+            <h2>01. The Heritage Series</h2>
+            <p>Inspired by the vast landscapes of the Savannah, the Heritage Series utilizes hand-spun cotton and architectural silhouettes. These pieces are designed for the individual who respects the weight of history but walks toward the future.</p>
+        </div>
+        <div class="item-grid" id="grid-heritage"></div>
+    </section>
+
+    <section class="collection-block" style="background: var(--accent-green); color: white;">
+        <div class="section-details">
+            <h2 style="color: white;">02. Midnight Formals</h2>
+            <p style="opacity: 0.9;">Crafted for the deep night. This collection features heavy velvets, silk linings, and the signature OLB gold-thread embroidery. Every stitch is a testament to the quiet power of evening elegance.</p>
+        </div>
+        <div class="item-grid" id="grid-midnight"></div>
+    </section>
+
+    <section class="collection-block">
+        <div class="section-details">
+            <h2>03. Urban Ready-To-Wear</h2>
+            <p>The Zenith of modern convenience. Lightweight linens and structured tunics designed for a global lifestyle. From Lagos to London, these pieces transition seamlessly across borders.</p>
+        </div>
+        <div class="item-grid" id="grid-urban"></div>
+    </section>
+
+    <div class="overlay" id="overlay" onclick="toggleCart()"></div>
+    <div class="cart-panel" id="cart-panel">
+        <h2 style="font-family: 'Bodoni Moda';">Your Selection</h2>
+        <div class="cart-items" id="cart-list"></div>
+        <div class="cart-footer">
+            <input type="email" id="customer-email" placeholder="Email for Receipt" style="width:100%; padding:10px; margin-bottom:15px; background:transparent; border:1px solid var(--border); color:var(--text-color)">
+            <div style="display:flex; justify-content:space-between; margin-bottom:20px; font-weight:800">
+                <span>TOTAL</span>
+                <span id="total-val">₦0</span>
+            </div>
+            <button class="checkout-btn" onclick="initPaystack()">PROCEED TO PAYSTACK</button>
+        </div>
+    </div>
+
+    <footer>
+        <div class="logo" style="margin-bottom: 20px;">OLB</div>
+        <p>© 2026 Olb Clothings — Luxury Hand-Tailored Apparel.</p>
+    </footer>
+
+    <script>
+        // 1. Logic to generate 100 items
+        const categories = [
+            { id: 'grid-heritage', prefix: 'Savannah', count: 34, startPrice: 150000 },
+            { id: 'grid-midnight', prefix: 'Atelier', count: 33, startPrice: 280000 },
+            { id: 'grid-urban', prefix: 'Zenith', count: 33, startPrice: 95000 }
+        ];
+
+        let cart = [];
+
+        function populateItems() {
+            categories.forEach(cat => {
+                const container = document.getElementById(cat.id);
+                for(let i = 1; i <= cat.count; i++) {
+                    const price = cat.startPrice + (i * 2500);
+                    const name = `${cat.prefix} Design No. ${100 + i}`;
+                    container.innerHTML += `
+                        <div class="item-card">
+                            <img src="https://images.unsplash.com/photo-${1580000000000 + (i * 10000)}?auto=format&fit=crop&q=40&w=400" onerror="this.src='https://images.unsplash.com/photo-1594932224456-74971260a925?w=400'">
+                            <div class="item-info">
+                                <span class="item-name">${name}</span>
+                                <span class="item-price">₦${(price/1000).toFixed(0)}k</span>
+                            </div>
+                            <button class="add-to-bag" onclick="addToCart('${name}', ${price})">ADD TO BAG</button>
+                        </div>
+                    `;
+                }
+            });
+        }
+
+        // 2. Real-time Cart Logic
+        function addToCart(name, price) {
+            cart.push({name, price});
+            updateUI();
+            toggleCart(true);
+        }
+
+        function updateUI() {
+            document.getElementById('cart-count').innerText = cart.length;
+            const list = document.getElementById('cart-list');
+            list.innerHTML = cart.map((item, idx) => `
+                <div class="cart-item">
+                    <span>${item.name}</span>
+                    <span>₦${item.price.toLocaleString()} <span onclick="remove(${idx})" style="color:red; cursor:pointer; margin-left:10px">×</span></span>
+                </div>
+            `).join('');
+            
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+            document.getElementById('total-val').innerText = `₦${total.toLocaleString()}`;
+        }
+
+        function remove(idx) { cart.splice(idx, 1); updateUI(); }
+
+        function toggleCart(open = null) {
+            const panel = document.getElementById('cart-panel');
+            const overlay = document.getElementById('overlay');
+            if(open === true) { panel.classList.add('active'); overlay.classList.add('active'); }
+            else { panel.classList.toggle('active'); overlay.classList.toggle('active'); }
+        }
+
+        function toggleMode() {
+            const html = document.documentElement;
+            html.setAttribute('data-theme', html.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
+        }
+
+        // 3. Paystack Implementation
+        function initPaystack() {
+            const email = document.getElementById('customer-email').value;
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+            if(!email) return alert("Please enter your email.");
+            if(total === 0) return alert("Your bag is empty.");
+
+            let handler = PaystackPop.setup({
+                key: 'pk_test_xxxxxxxxxxxxxxxxxxxxxxxx', // Replace with your Key
+                email: email,
+                amount: total * 100,
+                currency: "NGN",
+                callback: function(res) {
+                    alert('Order Placed! Reference: ' + res.reference);
+                    cart = []; updateUI(); toggleCart();
+                }
+            });
+            handler.openIframe();
+        }
+
+        populateItems();
+    </script>
+</body>
+</html>

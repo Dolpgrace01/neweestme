@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book a Fitting | Olb Clothings</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@700;900&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --forest: #1B3022;
+            --gold: #C5A059;
+            --deep-brown: #2D1B14;
+            --white: #F9F9F7;
+            --card-bg: #1E1E1E;
+            --border: rgba(197, 160, 89, 0.2);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: var(--deep-brown); color: var(--white); font-family: 'Montserrat', sans-serif; overflow: hidden; }
+
+        .booking-container { display: flex; height: 100vh; }
+
+        /* --- Left Side: Brand Image --- */
+        .image-side {
+            flex: 1;
+            background: linear-gradient(rgba(27, 48, 34, 0.4), rgba(45, 27, 20, 0.6)), 
+                        url('https://images.unsplash.com/photo-1598460833356-e9e185f9587a?auto=format&fit=crop&q=80&w=1200');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 60px;
+        }
+
+        .image-side h2 { font-family: 'Bodoni Moda', serif; font-size: 3.5rem; line-height: 1; }
+        .image-side p { margin-top: 20px; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; font-size: 0.8rem; }
+
+        /* --- Right Side: Form --- */
+        .form-side {
+            flex: 1;
+            background: var(--deep-brown);
+            padding: 80px 10%;
+            overflow-y: auto;
+            border-left: 1px solid var(--border);
+        }
+
+        .form-section { margin-bottom: 50px; }
+        .form-section h3 { 
+            font-family: 'Bodoni Moda', serif; 
+            font-size: 1.8rem; 
+            margin-bottom: 25px; 
+            color: var(--gold);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+        }
+
+        /* --- Custom Inputs --- */
+        .selection-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        
+        .option-card {
+            border: 1px solid var(--border);
+            padding: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-align: center;
+        }
+        .option-card:hover, .option-card.active {
+            border-color: var(--gold);
+            background: rgba(197, 160, 89, 0.05);
+        }
+        .option-card h4 { font-size: 0.8rem; letter-spacing: 1px; }
+
+        .input-group { margin-bottom: 20px; }
+        .input-group label { display: block; font-size: 0.7rem; color: var(--gold); margin-bottom: 8px; letter-spacing: 1px; }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 15px;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: white;
+            font-family: 'Montserrat', sans-serif;
+            outline: none;
+        }
+        input:focus { border-color: var(--gold); }
+
+        .submit-btn {
+            width: 100%;
+            padding: 20px;
+            background: var(--gold);
+            color: var(--deep-brown);
+            border: none;
+            font-weight: 700;
+            letter-spacing: 2px;
+            cursor: pointer;
+            margin-top: 20px;
+            text-transform: uppercase;
+        }
+
+        @media (max-width: 900px) {
+            .booking-container { flex-direction: column; overflow-y: auto; }
+            .image-side { height: 40vh; padding: 30px; }
+            .form-side { height: auto; padding: 40px 5%; }
+        }
+        /* --- Global Navigation Styling --- */
+    :root {
+        --nav-bg: rgba(255, 255, 255, 0.9);
+        --nav-text: #2D1B14;
+        --nav-border: rgba(0,0,0,0.1);
+        --nav-gold: #C5A059;
+    }
+
+    [data-theme="dark"] {
+        --nav-bg: rgba(18, 18, 18, 0.95);
+        --nav-text: #F9F9F7;
+        --nav-border: rgba(255,255,255,0.1);
+    }
+
+    .global-nav {
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 80px;
+        display: flex; justify-content: space-between; align-items: center;
+        padding: 0 5%;
+        background: var(--nav-bg);
+        backdrop-filter: blur(15px);
+        border-bottom: 1px solid var(--nav-border);
+        z-index: 9999;
+        transition: all 0.4s ease;
+    }
+
+    .logo {
+        font-family: 'Bodoni Moda', serif;
+        font-size: 1.8rem;
+        font-weight: 900;
+        text-decoration: none;
+        color: var(--nav-text);
+        letter-spacing: 2px;
+    }
+
+    .nav-icon-link {
+        text-decoration: none;
+        color: var(--nav-text);
+        font-size: 0.7rem;
+        font-weight: 600;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+    }
+
+    .theme-toggle {
+        background: var(--nav-text);
+        color: var(--nav-bg);
+        border: none;
+        padding: 8px 15px;
+        font-size: 0.6rem;
+        font-weight: 700;
+        cursor: pointer;
+        letter-spacing: 1px;
+        margin-right: 20px;
+    }
+
+    /* Hide back button on the actual homepage */
+    body.is-home #back-btn { display: none; }
+
+    /* Adjust page content padding so it doesn't hide under the nav */
+    body { padding-top: 80px; }
+    </style>
+</head>
+<body>
+    <nav class="global-nav" id="main-nav">
+    <div class="nav-left">
+        <a href="javascript:history.back()" class="nav-icon-link" id="back-btn">
+            <span>←</span> BACK
+        </a>
+    </div>
+
+    <div class="nav-center">
+        <a href="index.html" class="logo">OLB</a>
+    </div>
+
+    <div class="nav-right">
+        <button class="theme-toggle" onclick="toggleGlobalTheme()" id="theme-btn">
+            <span class="mode-text">DARK MODE</span>
+        </button>
+        <a href="index.html" class="nav-icon-link">HOME</a>
+    </div>
+</nav>
+    
+
+    <div class="booking-container">
+        
+        <div class="image-side">
+            <p>Master Tailoring since 2026</p>
+            <h2>Secure Your <br>Session.</h2>
+        </div>
+
+        <div class="form-side">
+            <form id="fitting-form" onsubmit="handleBooking(event)">
+                
+                <div class="form-section">
+                    <h3>01. Select Service</h3>
+                    <div class="selection-grid">
+                        <div class="option-card active" onclick="selectOption(this, 'service')">
+                            <h4>BESPOKE SUIT</h4>
+                            <p style="font-size: 0.6rem; opacity: 0.6; margin-top:5px">Initial Pattern Draft</p>
+                        </div>
+                        <div class="option-card" onclick="selectOption(this, 'service')">
+                            <h4>TRADITIONAL</h4>
+                            <p style="font-size: 0.6rem; opacity: 0.6; margin-top:5px">Agbada & Kaftan Luxury</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>02. Personal Details</h3>
+                    <div class="input-group">
+                        <label>FULL NAME</label>
+                        <input type="text" id="name" required placeholder="Alexander Olb">
+                    </div>
+                    <div class="selection-grid">
+                        <div class="input-group">
+                            <label>EMAIL</label>
+                            <input type="email" id="email" required placeholder="alex@heritage.com">
+                        </div>
+                        <div class="input-group">
+                            <label>PHONE</label>
+                            <input type="tel" id="phone" required placeholder="+234...">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>03. Availability</h3>
+                    
+                    <div class="selection-grid">
+                        <div class="input-group">
+                            <label>PREFERRED DATE</label>
+                            <input type="date" id="date" required>
+                        </div>
+                        <div class="input-group">
+                            <label>TIME SLOT</label>
+                            <select id="time">
+                                <option>10:00 AM — 11:30 AM</option>
+                                <option>01:00 PM — 02:30 PM</option>
+                                <option>04:00 PM — 05:30 PM</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>04. Measurements (Optional)</h3>
+                    <p style="font-size: 0.7rem; opacity: 0.6; margin-bottom: 20px;">Provide these if you would like a pre-fitting draft ready.</p>
+                    <div class="selection-grid">
+                        <input type="text" placeholder="Chest (cm)">
+                        <input type="text" placeholder="Waist (cm)">
+                        <input type="text" placeholder="Sleeve (cm)">
+                        <input type="text" placeholder="Shoulder (cm)">
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn">Request Private Fitting</button>
+                <p style="text-align:center; font-size:0.6rem; margin-top: 15px; opacity:0.5; letter-spacing:1px">
+                    A MEMBER OF THE ATELIER WILL CONFIRM VIA WHATSAPP WITHIN 2 HOURS.
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // --- Global Theme Logic ---
+    function applyTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('olb-theme', theme);
+        const btnText = document.querySelector('.mode-text');
+        if(btnText) btnText.innerText = theme === 'dark' ? 'LIGHT MODE' : 'DARK MODE';
+    }
+
+    function toggleGlobalTheme() {
+        const current = document.documentElement.getAttribute('data-theme');
+        const next = current === 'dark' ? 'light' : 'dark';
+        applyTheme(next);
+    }
+
+    // On Load: Check for saved preference
+    window.addEventListener('DOMContentLoaded', () => {
+        const savedTheme = localStorage.getItem('olb-theme') || 'dark';
+        applyTheme(savedTheme);
+
+        // Check if we are on the homepage to hide "Back"
+        if(window.location.pathname.includes('index.html') || window.location.pathname === '/') {
+            document.body.classList.add('is-home');
+        }
+    });
+        // Toggle active state for custom option cards
+        function selectOption(element, type) {
+            const siblings = element.parentElement.querySelectorAll('.option-card');
+            siblings.forEach(s => s.classList.remove('active'));
+            element.classList.add('active');
+        }
+
+        // Handle Form Submission
+        function handleBooking(e) {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const date = document.getElementById('date').value;
+            
+            // In a real app, you would send this to your email or Shopify database
+            alert(`Thank you, ${name}. Your request for ${date} has been sent to the Olb Atelier.`);
+            
+            // Redirect back to home
+            // window.location.href = "index.html";
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact | Olb Clothings</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,900;1,400&family=Montserrat:wght@200;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #F9F9F7; --text: #2D1B14; --gold: #C5A059; --forest: #1B3022; --border: rgba(45, 27, 20, 0.1);
+        }
+        [data-theme="dark"] {
+            --bg: #0A0A0A; --text: #F9F9F7; --gold: #D4AF37; --border: rgba(255, 255, 255, 0.05);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        body { background: var(--bg); color: var(--text); font-family: 'Montserrat', sans-serif; padding-top: 80px; }
+
+        /* --- Global Nav --- */
+        nav {
+            position: fixed; top: 0; width: 100%; height: 80px;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 5%; background: var(--bg); backdrop-filter: blur(15px);
+            z-index: 1000; border-bottom: 1px solid var(--border);
+        }
+        .logo { font-family: 'Bodoni Moda', serif; font-size: 1.5rem; font-weight: 900; color: var(--text); text-decoration: none; letter-spacing: 2px; }
+        .nav-link { text-decoration: none; color: var(--text); font-size: 0.7rem; font-weight: 700; letter-spacing: 2px; margin-left: 20px; text-transform: uppercase; cursor: pointer; }
+
+        /* --- Page Layout --- */
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 90vh;
+        }
+
+        /* --- Left Side: Info --- */
+        .contact-info {
+            padding: 100px 10%;
+            border-right: 1px solid var(--border);
+        }
+        .contact-info h1 {
+            font-family: 'Bodoni Moda', serif;
+            font-size: clamp(3rem, 6vw, 5rem);
+            line-height: 1;
+            margin-bottom: 40px;
+        }
+        .contact-info h1 span { font-style: italic; color: var(--gold); }
+
+        .info-block { margin-bottom: 50px; }
+        .info-block h3 { 
+            font-size: 0.7rem; 
+            letter-spacing: 3px; 
+            color: var(--gold); 
+            margin-bottom: 15px; 
+            text-transform: uppercase; 
+        }
+        .info-block p { font-size: 1.1rem; font-weight: 300; line-height: 1.6; }
+        .info-block a { color: var(--text); text-decoration: none; border-bottom: 1px solid var(--gold); }
+
+        /* --- Right Side: Form --- */
+        .contact-form-side {
+            padding: 100px 10%;
+            background: var(--bg);
+        }
+        .form-group { margin-bottom: 30px; }
+        .form-group label { display: block; font-size: 0.6rem; letter-spacing: 2px; margin-bottom: 10px; opacity: 0.6; }
+        
+        input, textarea {
+            width: 100%;
+            padding: 15px 0;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid var(--border);
+            color: var(--text);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            outline: none;
+        }
+        input:focus, textarea:focus { border-bottom-color: var(--gold); }
+
+        .submit-btn {
+            background: var(--text);
+            color: var(--bg);
+            border: none;
+            padding: 20px 50px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            cursor: pointer;
+            margin-top: 30px;
+            text-transform: uppercase;
+        }
+        .submit-btn:hover { background: var(--gold); color: white; }
+
+        /* --- Map/Location Section --- */
+        .locations-grid {
+            grid-column: span 2;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            border-top: 1px solid var(--border);
+            background: var(--forest);
+            color: white;
+        }
+        .loc-card { padding: 60px 10%; border-right: 1px solid rgba(255,255,255,0.1); }
+        .loc-card h4 { font-family: 'Bodoni Moda', serif; font-size: 1.5rem; margin-bottom: 10px; color: var(--gold); }
+        .loc-card p { font-size: 0.8rem; opacity: 0.7; }
+
+        @media (max-width: 900px) {
+            .contact-container { grid-template-columns: 1fr; }
+            .locations-grid { grid-template-columns: 1fr; }
+            .contact-info { border-right: none; border-bottom: 1px solid var(--border); }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-group">
+            <span class="nav-link" onclick="history.back()">← Back</span>
+            <a href="index.html" class="nav-link">Home</a>
+        </div>
+        <a href="index.html" class="logo">OLB</a>
+        <div class="nav-group">
+            <span class="nav-link" onclick="toggleTheme()">Mode</span>
+            <a href="shopall.html" class="nav-link" style="color:var(--gold)">Shop</a>
+        </div>
+    </nav>
+
+    <div class="contact-container">
+        
+        <div class="contact-info">
+            <h1>Inquiries & <span>Appointments.</span></h1>
+            
+            <div class="info-block">
+                <h3>The Atelier</h3>
+                <p>12B Admiralty Way, Lekki Phase 1<br>Lagos, Nigeria</p>
+            </div>
+
+            <div class="info-block">
+                <h3>Digital Correspondence</h3>
+                <p><a href="mailto:bespoke@olbclothings.com">bespoke@olbclothings.com</a></p>
+                <p style="margin-top: 10px;"><a href="tel:+2348000000000">+234 800 OLB BESPOKE</a></p>
+            </div>
+
+            <div class="info-block">
+                <h3>Social Architecture</h3>
+                <p><a href="#">Instagram</a> / <a href="#">Twitter</a> / <a href="#">LinkedIn</a></p>
+            </div>
+        </div>
+
+        <div class="contact-form-side">
+            <form id="contactForm" onsubmit="handleSubmit(event)">
+                <div class="form-group">
+                    <label>YOUR NAME</label>
+                    <input type="text" placeholder="Alexander Zenith" required>
+                </div>
+                <div class="form-group">
+                    <label>EMAIL ADDRESS</label>
+                    <input type="email" placeholder="alex@heritage.com" required>
+                </div>
+                <div class="form-group">
+                    <label>INQUIRY TYPE</label>
+                    <select style="width:100%; background:transparent; border:none; border-bottom:1px solid var(--border); color:var(--text); padding:15px 0;">
+                        <option>Bespoke Tailoring</option>
+                        <option>Ready-to-Wear Inquiry</option>
+                        <option>Press & Collaboration</option>
+                        <option>Order Tracking</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>MESSAGE</label>
+                    <textarea rows="4" placeholder="Describe your vision..."></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Send Inquiry</button>
+            </form>
+        </div>
+
+        <div class="locations-grid">
+            <div class="loc-card">
+                <h4>Lagos</h4>
+                <p>Flagship Atelier<br>Open Mon — Sat<br>10:00 - 19:00</p>
+            </div>
+            <div class="loc-card">
+                <h4>London</h4>
+                <p>Savile Row Showroom<br>By Appointment Only<br>Mayfair, W1S</p>
+            </div>
+            <div class="loc-card">
+                <h4>Accra</h4>
+                <p>Cantonments Studio<br>Concept Store<br>Greater Accra</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const current = html.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', next);
+            localStorage.setItem('olb-theme', next);
+        }
+
+        function handleSubmit(e) {
+            e.preventDefault();
+            alert("Your inquiry has been received. A master tailor will contact you shortly.");
+            e.target.reset();
+        }
+
+        // Apply saved theme on load
+        window.onload = () => {
+            const saved = localStorage.getItem('olb-theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', saved);
+        }
+    </script>
+</body>
+</html>

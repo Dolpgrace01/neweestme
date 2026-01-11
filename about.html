@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Story | Olb Clothings</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,900;1,400&family=Montserrat:wght@200;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Variables for Global Theme Sync */
+        :root {
+            --bg: #F9F9F7;
+            --text: #2D1B14;
+            --gold: #C5A059;
+            --forest: #1B3022;
+        }
+        [data-theme="dark"] {
+            --bg: #121212;
+            --text: #F9F9F7;
+            --gold: #D4AF37;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: var(--bg); color: var(--text); font-family: 'Montserrat', sans-serif; transition: 0.5s; line-height: 1.8; }
+
+        /* --- Global Nav Integration (Simplified for code snippet) --- */
+        .global-nav {
+            position: fixed; top: 0; width: 100%; height: 80px;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 5%; background: var(--bg); border-bottom: 1px solid rgba(175, 145, 100, 0.2);
+            z-index: 1000;
+        }
+        .logo { font-family: 'Bodoni Moda', serif; font-size: 1.5rem; font-weight: 900; color: var(--text); text-decoration: none; }
+
+        /* --- Hero Section --- */
+        .about-hero {
+            height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding-top: 80px;
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
+                        url('https://images.unsplash.com/photo-1598460833356-e9e185f9587a?auto=format&fit=crop&q=80&w=2000');
+            background-size: cover;
+            background-attachment: fixed;
+        }
+
+        .about-hero h1 {
+            font-family: 'Bodoni Moda', serif;
+            font-size: clamp(3rem, 10vw, 7rem);
+            color: white;
+            font-style: italic;
+        }
+
+        /* --- Story Content --- */
+        .story-section {
+            padding: 120px 10%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 100px;
+            align-items: center;
+        }
+
+        .story-text h2 {
+            font-family: 'Bodoni Moda', serif;
+            font-size: 3rem;
+            margin-bottom: 30px;
+            color: var(--gold);
+        }
+
+        .story-text p {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+
+        .story-image {
+            position: relative;
+        }
+
+        .story-image img {
+            width: 100%;
+            border: 1px solid var(--gold);
+            padding: 15px;
+        }
+
+        /* --- The Pillars (Gen Z + Traditional) --- */
+        .pillars {
+            background: var(--forest);
+            color: white;
+            padding: 100px 5%;
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+        }
+
+        .pillar-item { flex: 1; padding: 0 40px; }
+        .pillar-item h3 { font-family: 'Bodoni Moda', serif; font-size: 2rem; color: var(--gold); margin-bottom: 15px; }
+
+        /* --- Signature Section --- */
+        .signature {
+            padding: 150px 10%;
+            text-align: center;
+        }
+
+        .signature h4 {
+            font-family: 'Bodoni Moda', serif;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .btn-home {
+            display: inline-block;
+            margin-top: 40px;
+            padding: 15px 40px;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            text-decoration: none;
+            letter-spacing: 2px;
+            font-size: 0.8rem;
+        }
+
+        @media (max-width: 768px) {
+            .story-section { grid-template-columns: 1fr; gap: 50px; }
+            .pillars { flex-direction: column; gap: 50px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="global-nav">
+        <a href="javascript:history.back()" style="text-decoration:none; color:var(--text); font-size:0.7rem;">← BACK</a>
+        <a href="index.html" class="logo">OLB</a>
+        <div style="display:flex; gap: 20px;">
+            <button onclick="toggleTheme()" style="background:none; border:none; color:var(--gold); cursor:pointer; font-size:0.7rem;">THEME</button>
+            <a href="index.html" style="text-decoration:none; color:var(--text); font-size:0.7rem;">HOME</a>
+        </div>
+    </nav>
+
+    <header class="about-hero">
+        <h1>The Heritage <br>Reconstructed.</h1>
+    </header>
+
+    <section class="story-section">
+        <div class="story-image">
+            <img src="https://images.unsplash.com/photo-1555529771-835f59fc5efe?auto=format&fit=crop&q=80&w=1000" alt="Master Tailor">
+        </div>
+        <div class="story-text">
+            <h2>Our Origin</h2>
+            <p>Olb Clothings began in the heart of Lagos with a singular vision: to ensure that the exquisite artistry of traditional African tailoring didn't just survive the digital age, but defined it.</p>
+            <p>We saw a gap between the rigid traditions of the past and the fluid, expressive style of the <b>Gen Z</b> generation. Our mission is to fill that gap with premium fabrics, precision measurements, and soul-deep design.</p>
+        </div>
+    </section>
+
+    <section class="pillars">
+        <div class="pillar-item">
+            <h3>Ancestral Wisdom</h3>
+            <p>We respect the cut. We honor the hand-stitch. Every pattern we draft is rooted in decades of tailoring expertise passed through generations.</p>
+        </div>
+        <div class="pillar-item">
+            <h3>Future Vision</h3>
+            <p>We design for the nomad, the creator, and the disruptor. Our garments are silhouettes of power for the modern, global stage.</p>
+        </div>
+    </section>
+
+    <section class="signature">
+        <h4>Stitched with Intent.</h4>
+        <p style="opacity: 0.6;">OLB CLOTHINGS ATELIER — 2026</p>
+        <a href="index.html" class="btn-home">RETURN TO SHOP</a>
+    </section>
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const current = html.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', next);
+            localStorage.setItem('olb-theme', next);
+        }
+
+        // Apply saved theme
+        window.onload = () => {
+            const saved = localStorage.getItem('olb-theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', saved);
+        }
+    </script>
+</body>
+</html>

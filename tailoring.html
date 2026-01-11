@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Atelier | Olb Clothings</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,800;1,400&family=Montserrat:wght@200;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --forest: #1B3022;
+            --gold: #C5A059;
+            --white: #F9F9F7;
+            --deep-brown: #231F20;
+            --overlay: rgba(0,0,0,0.6);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: var(--deep-brown); color: var(--white); font-family: 'Montserrat', sans-serif; overflow-x: hidden; }
+
+        /* --- Full Screen Hero --- */
+        .atelier-hero {
+            height: 100vh;
+            background: linear-gradient(var(--overlay), var(--overlay)), 
+                        url('https://images.unsplash.com/photo-1556906781-9a412961c28c?auto=format&fit=crop&q=80&w=2000');
+            background-size: cover;
+            background-attachment: fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .hero-title h1 {
+            font-family: 'Bodoni Moda', serif;
+            font-size: clamp(3rem, 10vw, 8rem);
+            font-weight: 800;
+            line-height: 0.9;
+        }
+
+        /* --- Technical Specs Section --- */
+        .craft-details {
+            padding: 150px 10%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 100px;
+            align-items: center;
+        }
+
+        .craft-details img {
+            width: 100%;
+            border-left: 1px solid var(--gold);
+            padding-left: 20px;
+        }
+
+        .spec-list {
+            list-style: none;
+            margin-top: 30px;
+        }
+
+        .spec-list li {
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(197, 160, 89, 0.3);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .spec-list span { color: var(--gold); font-weight: 600; text-transform: uppercase; font-size: 0.8rem; }
+
+        /* --- The 3-Step Process --- */
+        .process-grid {
+            padding: 100px 5%;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            background: var(--white);
+            color: var(--deep-brown);
+        }
+
+        .process-card {
+            padding: 60px 40px;
+            border: 1px solid rgba(0,0,0,0.05);
+            transition: 0.5s;
+        }
+
+        .process-card:hover { background: var(--forest); color: white; transform: translateY(-10px); }
+
+        .process-number { font-family: 'Bodoni Moda', serif; font-size: 3rem; color: var(--gold); margin-bottom: 20px; }
+
+        /* --- Measurement Table --- */
+        .measurement-section {
+            padding: 100px 10%;
+            background: var(--forest);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 50px;
+            font-size: 0.9rem;
+        }
+
+        th { text-align: left; padding: 20px; color: var(--gold); font-family: 'Bodoni Moda'; font-size: 1.5rem; }
+        td { padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+
+        .btn-bespoke {
+            display: inline-block;
+            margin-top: 50px;
+            padding: 20px 40px;
+            background: var(--gold);
+            color: black;
+            text-decoration: none;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        @media (max-width: 768px) {
+            .craft-details, .process-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <section class="atelier-hero">
+        <div class="hero-title">
+            <h5 style="letter-spacing: 5px; margin-bottom: 20px;">HAND-STITCHED EXCELLENCE</h5>
+            <h1>The <br>Atelier.</h1>
+            <p style="margin-top: 30px; font-weight: 200;">Where measurements become masterpieces.</p>
+        </div>
+    </section>
+
+    <section class="craft-details">
+        <div>
+            <h2 style="font-family: 'Bodoni Moda'; font-size: 3.5rem; margin-bottom: 20px;">The Anatomy <br>of an Olb Suit</h2>
+            <p>Every garment is a marriage of structural integrity and fluid aesthetics. We utilize canvas construction rather than fusing to ensure the garment breathes and molds to your body over time.</p>
+            
+            <ul class="spec-list">
+                <li>
+                    <p>Internal Structure</p>
+                    <span>Full Horsehair Canvas</span>
+                </li>
+                <li>
+                    <p>Lapel Finishing</p>
+                    <span>Hand-Rolled & Padded</span>
+                </li>
+                <li>
+                    <p>Buttonholes</p>
+                    <span>Milanese Silk Stitch</span>
+                </li>
+                <li>
+                    <p>Shoulder Expression</p>
+                    <span>Spalla Camicia (Neapolitan Style)</span>
+                </li>
+            </ul>
+        </div>
+        <img src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&q=80&w=1000" alt="Tailoring Details">
+    </section>
+
+    <section class="process-grid">
+        <div class="process-card">
+            <div class="process-number">01</div>
+            <h3>Consultation</h3>
+            <p>A deep dive into your lifestyle, preferences, and the occasion. We select fabrics from the world's finest mills.</p>
+        </div>
+        <div class="process-card">
+            <div class="process-number">02</div>
+            <h3>The Drafting</h3>
+            <p>Your unique pattern is drafted from scratch on brown paper. No stock patterns are ever used.</p>
+        </div>
+        <div class="process-card">
+            <div class="process-number">03</div>
+            <h3>The Fitting</h3>
+            <p>Two to three fittings ensure the drape is perfect. We adjust for posture, slope, and movement.</p>
+        </div>
+    </section>
+
+    
+
+    <section class="measurement-section">
+        <h2 style="font-family: 'Bodoni Moda'; font-size: 3rem;">Measurement Reference</h2>
+        <p style="opacity: 0.8;">For our global clients, please refer to our precision points.</p>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Anatomical Point</th>
+                    <th>Precision Method</th>
+                    <th>Olb Standard</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Chest Circumference</td>
+                    <td>Fullest part of the chest, kept level across back.</td>
+                    <td>+2 inch ease</td>
+                </tr>
+                <tr>
+                    <td>Sleeve Pitch</td>
+                    <td>From shoulder bone to the first knuckle of the thumb.</td>
+                    <td>Natural Drape</td>
+                </tr>
+                <tr>
+                    <td>Jacket Length</td>
+                    <td>Base of neck to the point where thumb meets palm.</td>
+                    <td>Classic Proportion</td>
+                </tr>
+                <tr>
+                    <td>Trouser Rise</td>
+                    <td>From the top of the waistband to the crotch seam.</td>
+                    <td>High/Mid Available</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <a href="booking.html" class="btn-bespoke">BOOK YOUR FITTING</a>
+    </section>
+
+    <footer style="padding: 100px 5%; text-align: center; background: #000;">
+        <h2 style="font-family: 'Bodoni Moda'; color: var(--gold);">OLB CLOTHINGS</h2>
+        <p style="font-size: 0.7rem; margin-top: 20px; letter-spacing: 2px;">LAGOS • LONDON • ACCRA</p>
+    </footer>
+
+</body>
+</html>

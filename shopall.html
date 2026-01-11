@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Olb Clothings | Luxury Shop</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@700;900&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://js.paystack.co/v1/inline.js"></script>
+    
+    <style>
+        :root {
+            --bg: #F9F9F7;
+            --nav-bg: rgba(249, 249, 247, 0.9);
+            --text: #2D1B14;
+            --gold: #C5A059;
+            --forest: #1B3022;
+            --card: #FFFFFF;
+            --border: rgba(45, 27, 20, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --bg: #121212;
+            --nav-bg: rgba(18, 18, 18, 0.95);
+            --text: #F9F9F7;
+            --gold: #D4AF37;
+            --forest: #1B3022;
+            --card: #1E1E1E;
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; transition: all 0.3s ease; }
+        body { background: var(--bg); color: var(--text); font-family: 'Montserrat', sans-serif; overflow-x: hidden; }
+
+        /* --- Navigation --- */
+        nav {
+            position: fixed; top: 0; width: 100%; height: 90px;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 5%; background: var(--nav-bg); backdrop-filter: blur(10px);
+            z-index: 1000; border-bottom: 1px solid var(--border);
+        }
+        .logo { font-family: 'Bodoni Moda', serif; font-size: 1.8rem; font-weight: 900; letter-spacing: 2px; }
+        .nav-right { display: flex; align-items: center; gap: 25px; }
+        
+        .cart-trigger { 
+            background: var(--forest); color: white; padding: 12px 25px; 
+            border: 1px solid var(--gold); cursor: pointer; font-weight: 600;
+        }
+
+        /* --- Shop Hero --- */
+        .shop-header { padding: 150px 5% 50px; text-align: center; }
+        .shop-header h1 { font-family: 'Bodoni Moda', serif; font-size: 4rem; margin-bottom: 10px; }
+        
+        /* --- Filters --- */
+        .filter-bar { display: flex; justify-content: center; gap: 15px; margin-bottom: 60px; }
+        .filter-btn { 
+            background: transparent; border: 1px solid var(--border); color: var(--text);
+            padding: 10px 25px; cursor: pointer; font-size: 0.8rem; letter-spacing: 1px;
+        }
+        .filter-btn.active { background: var(--gold); color: black; border-color: var(--gold); }
+
+        /* --- Product Grid --- */
+        .container { max-width: 1300px; margin: 0 auto; padding: 0 5%; }
+        .product-grid { 
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 40px; 
+            margin-bottom: 100px;
+        }
+        .product-card { background: var(--card); border: 1px solid var(--border); padding: 20px; position: relative; }
+        .product-card img { width: 100%; aspect-ratio: 3/4; object-fit: cover; margin-bottom: 20px; }
+        .product-card h3 { font-family: 'Bodoni Moda', serif; font-size: 1.4rem; margin-bottom: 10px; }
+        .price { color: var(--gold); font-weight: 600; font-size: 1.1rem; }
+        .add-btn { 
+            width: 100%; margin-top: 20px; padding: 15px; 
+            background: var(--text); color: var(--bg); border: none; cursor: pointer; font-weight: 600;
+        }
+        .add-btn:hover { background: var(--gold); color: black; }
+
+        /* --- Cart Modal --- */
+        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; z-index: 2000; }
+        .cart-modal { 
+            position: fixed; right: -450px; top: 0; width: 450px; height: 100vh;
+            background: var(--card); z-index: 2001; padding: 40px; 
+            display: flex; flex-direction: column;
+        }
+        .cart-modal.active { right: 0; }
+        .overlay.active { display: block; }
+
+        .cart-items { flex-grow: 1; overflow-y: auto; margin: 30px 0; border-top: 1px solid var(--border); }
+        .cart-item { display: flex; justify-content: space-between; padding: 20px 0; border-bottom: 1px solid var(--border); }
+        
+        .checkout-area { border-top: 2px solid var(--gold); padding-top: 20px; }
+        .input-group { margin-bottom: 15px; }
+        .input-group input { 
+            width: 100%; padding: 12px; background: transparent; 
+            border: 1px solid var(--border); color: var(--text); 
+        }
+
+        .pay-btn { 
+            width: 100%; padding: 20px; background: var(--forest); color: white; 
+            border: 1px solid var(--gold); font-weight: 700; cursor: pointer;
+        }
+
+        @media (max-width: 500px) { .cart-modal { width: 100%; } }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">OLB</div>
+        <div class="nav-right">
+            <button onclick="toggleTheme()" style="background:none; border:none; color:var(--gold); cursor:pointer">THEME</button>
+            <div class="cart-trigger" onclick="toggleCart()">
+                BAG (<span id="cart-count">0</span>)
+            </div>
+        </div>
+    </nav>
+
+    <header class="shop-header">
+        <p style="letter-spacing: 3px; color: var(--gold);">WORLD CLASS TAILORING</p>
+        <h1>The Zenith Gallery</h1>
+    </header>
+
+    <div class="container">
+        <div class="filter-bar">
+            <button class="filter-btn active" onclick="filterItems('all')">ALL PIECES</button>
+            <button class="filter-btn" onclick="filterItems('Bespoke')">BESPOKE</button>
+            <button class="filter-btn" onclick="filterItems('Ready-to-Wear')">READY-TO-WEAR</button>
+        </div>
+
+        <div class="product-grid" id="shop-grid">
+            </div>
+    </div>
+
+    <div class="overlay" id="overlay" onclick="toggleCart()"></div>
+    <div class="cart-modal" id="cart-modal">
+        <div style="display:flex; justify-content:space-between; align-items:center">
+            <h2 style="font-family: 'Bodoni Moda';">Your Bag</h2>
+            <span onclick="toggleCart()" style="cursor:pointer">CLOSE</span>
+        </div>
+        
+        <div class="cart-items" id="cart-list">
+            </div>
+
+        <div class="checkout-area">
+            <div class="input-group">
+                <input type="email" id="customer-email" placeholder="Email for Receipt">
+            </div>
+            <div style="display:flex; justify-content:space-between; margin-bottom: 20px; font-weight:700">
+                <span>TOTAL</span>
+                <span id="cart-total">₦0</span>
+            </div>
+            <button class="pay-btn" onclick="payWithPaystack()">SECURE CHECKOUT</button>
+        </div>
+    </div>
+
+    <script>
+        // 1. Data
+        const products = [
+            { id: 1, name: "Emerald Silk Agbada", price: 285000, cat: "Bespoke", img: "https://images.unsplash.com/photo-1593032465175-481ac7f401a0?w=600" },
+            { id: 2, name: "Gold-Leaf Tuxedo", price: 420000, cat: "Ready-to-Wear", img: "https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?w=600" },
+            { id: 3, name: "Deep Brown Kaftan", price: 155000, cat: "Bespoke", img: "https://images.unsplash.com/photo-1594932224456-74971260a925?w=600" },
+            { id: 4, name: "Zenith Velvet Blazer", price: 310000, cat: "Ready-to-Wear", img: "https://images.unsplash.com/photo-1555067336-3914a1af481e?w=600" },
+            { id: 5, name: "Forest Traditional Set", price: 195000, cat: "Bespoke", img: "https://images.unsplash.com/photo-1598460833356-e9e185f9587a?w=600" }
+        ];
+
+        let cart = [];
+
+        // 2. Core Functions
+        function renderShop(items) {
+            const grid = document.getElementById('shop-grid');
+            grid.innerHTML = items.map(p => `
+                <div class="product-card">
+                    <img src="${p.img}" alt="${p.name}">
+                    <h3>${p.name}</h3>
+                    <div style="display:flex; justify-content:space-between; align-items:center">
+                        <span style="font-size:0.7rem; opacity:0.6">${p.cat.toUpperCase()}</span>
+                        <span class="price">₦${p.price.toLocaleString()}</span>
+                    </div>
+                    <button class="add-btn" onclick="addToCart(${p.id})">ADD TO BAG</button>
+                </div>
+            `).join('');
+        }
+
+        function addToCart(id) {
+            const p = products.find(x => x.id === id);
+            cart.push(p);
+            updateCartUI();
+            toggleCart(true);
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            document.getElementById('cart-count').innerText = cart.length;
+            const list = document.getElementById('cart-list');
+            list.innerHTML = cart.map((item, idx) => `
+                <div class="cart-item">
+                    <div>
+                        <p style="font-weight:600">${item.name}</p>
+                        <p style="color:var(--gold); font-size:0.9rem">₦${item.price.toLocaleString()}</p>
+                    </div>
+                    <button onclick="removeFromCart(${idx})" style="background:none; border:none; color:red; cursor:pointer">Remove</button>
+                </div>
+            `).join('');
+            
+            const total = cart.reduce((a, b) => a + b.price, 0);
+            document.getElementById('cart-total').innerText = `₦${total.toLocaleString()}`;
+        }
+
+        function toggleCart(open = null) {
+            const modal = document.getElementById('cart-modal');
+            const overlay = document.getElementById('overlay');
+            if(open === true) { modal.classList.add('active'); overlay.classList.add('active'); }
+            else { modal.classList.toggle('active'); overlay.classList.toggle('active'); }
+        }
+
+        function filterItems(cat) {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            const filtered = cat === 'all' ? products : products.filter(p => p.cat === cat);
+            renderShop(filtered);
+        }
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            html.getAttribute('data-theme') === 'dark' ? html.setAttribute('data-theme', 'light') : html.setAttribute('data-theme', 'dark');
+        }
+
+        // 3. Paystack Integration
+        function payWithPaystack() {
+            const email = document.getElementById('customer-email').value;
+            const total = cart.reduce((a, b) => a + b.price, 0);
+
+            if (!email) return alert("Please enter your email.");
+            if (total === 0) return alert("Your bag is empty.");
+
+            let handler = PaystackPop.setup({
+                key: 'pk_test_xxxxxxxxxxxxxxxxxxxxxxxx', // REPLACE WITH YOUR PUBLIC KEY
+                email: email,
+                amount: total * 100, // Amount in kobo
+                currency: "NGN",
+                ref: 'OLB-'+Math.floor((Math.random() * 1000000000) + 1),
+                callback: function(response) {
+                    alert('Order Placed Successfully. Ref: ' + response.reference);
+                    cart = [];
+                    updateCartUI();
+                    toggleCart();
+                },
+                onClose: function() {
+                    alert('Transaction incomplete.');
+                }
+            });
+            handler.openIframe();
+        }
+
+        // Init
+        renderShop(products);
+    </script>
+</body>
+</html>
