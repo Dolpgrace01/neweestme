@@ -2,170 +2,192 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Wallet | Disbursement</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>StudentPay | Official Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #fcfcfc; }
+        .tap-effect:active { transform: scale(0.98); }
+        .dept-tag { font-size: 10px; padding: 2px 8px; border-radius: 4px; font-weight: 800; }
+    </style>
 </head>
-<body class="bg-gray-50 font-sans">
+<body class="bg-gray-50">
 
-    <nav class="bg-green-700 p-4 text-white shadow-lg">
-        <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-xl font-bold tracking-tight">STUDENT<span class="text-green-300">PAY</span></h1>
-            <div class="flex items-center gap-2">
-                <span id="userName" class="text-sm">Welcome, Student</span>
-                <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
-                    <i class="fa-solid fa-user text-xs"></i>
-                </div>
+    <div id="login-screen" class="fixed inset-0 z-[3000] bg-white p-8 flex flex-col justify-center">
+        <div class="mb-10 text-center">
+            <div class="w-16 h-16 bg-green-600 text-white rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-xl shadow-green-200">
+                <i data-lucide="graduation-cap" size="32"></i>
             </div>
-        </div>
-    </nav>
-
-    <div class="container mx-auto p-4 max-w-md">
-        
-        <div class="bg-white p-4 rounded-xl shadow-sm mb-6 border-l-4 border-blue-500">
-            <p class="text-gray-500 text-xs uppercase font-bold">Community Fund Pool</p>
-            <h2 class="text-2xl font-black text-gray-800" id="poolDisplay">₦0.00</h2>
+            <h1 class="text-2xl font-black text-gray-900">Departmental Vault</h1>
+            <p class="text-gray-500 text-sm">Select your path to continue</p>
         </div>
 
-        <div class="bg-white rounded-3xl shadow-xl overflow-hidden mb-6">
-            <div class="bg-gradient-to-br from-green-600 to-green-800 p-8 text-center text-white">
-                <p class="opacity-80 text-sm">Available for Withdrawal</p>
-                <h1 class="text-5xl font-bold mt-2" id="allowanceAmount">₦3,000</h1>
-                <p class="mt-4 text-xs bg-green-900/30 inline-block px-3 py-1 rounded-full">
-                    <i class="fa-solid fa-calendar-check mr-1"></i> Resets every Monday
-                </p>
-            </div>
+        <div class="space-y-4 max-w-sm mx-auto w-full">
+            <input type="text" id="username" class="w-full p-4 bg-gray-100 rounded-xl border-2 border-transparent focus:border-green-500 outline-none transition-all" placeholder="Student Name">
             
-            <div class="p-6">
-                <div class="flex justify-between text-sm mb-4">
-                    <span class="text-gray-500">Weekly Status:</span>
-                    <span id="statusBadge" class="text-green-600 font-bold uppercase">Ready</span>
-                </div>
-                
-                <div class="w-full bg-gray-200 rounded-full h-2 mb-6">
-                    <div id="progressBar" class="bg-green-500 h-2 rounded-full" style="width: 100%"></div>
-                </div>
+            <select id="dept" class="w-full p-4 bg-gray-100 rounded-xl border-2 border-transparent focus:border-green-500 outline-none appearance-none">
+                <option value="">Select Department</option>
+                <option value="SW">Software Engineering (SW)</option>
+                <option value="NC">Networking & Telecoms (NC)</option>
+                <option value="CS">Computer Science (CS)</option>
+            </select>
 
-                <button id="withdrawBtn" class="w-full bg-black text-white py-4 rounded-2xl font-bold text-lg hover:bg-gray-800 transition-all active:scale-95 shadow-lg">
-                    WITHDRAW ₦3,000
-                </button>
-            </div>
-        </div>
-
-        <div>
-            <h3 class="font-bold text-gray-700 mb-3 ml-1">Recent Activity</h3>
-            <div id="historyList" class="space-y-3">
-                <div class="text-center py-10 text-gray-400 text-sm">
-                    No transactions yet.
-                </div>
-            </div>
+            <input type="password" id="password" class="w-full p-4 bg-gray-100 rounded-xl border-2 border-transparent focus:border-green-500 outline-none" placeholder="Access Password">
+            
+            <button onclick="handleLogin()" class="w-full bg-green-600 text-white py-4 rounded-xl font-bold shadow-lg tap-effect">UNLOCK DASHBOARD</button>
         </div>
     </div>
-    <script>
-// --- INITIAL DATA (Simulating a Database) ---
-let globalPool = 150000; // Total money available for everyone
-let userHasWithdrawnThisWeek = false;
-let transactions = [];
 
-const poolEl = document.getElementById('poolDisplay');
-const allowanceEl = document.getElementById('allowanceAmount');
-const withdrawBtn = document.getElementById('withdrawBtn');
-const historyList = document.getElementById('historyList');
-const statusBadge = document.getElementById('statusBadge');
-const progressBar = document.getElementById('progressBar');
-
-// Initialize Display
-function updateUI() {
-    poolEl.innerText = `₦${globalPool.toLocaleString()}`;
-    
-    if (userHasWithdrawnThisWeek) {
-        allowanceEl.innerText = "₦0";
-        allowanceEl.classList.add('opacity-50');
-        withdrawBtn.disabled = true;
-        withdrawBtn.classList.replace('bg-black', 'bg-gray-400');
-        withdrawBtn.innerText = "LIMIT REACHED";
-        statusBadge.innerText = "Completed";
-        statusBadge.classList.replace('text-green-600', 'text-gray-400');
-        progressBar.style.width = "0%";
-    }
-
-    renderHistory();
-}
-
-// Logic for Withdrawal
-withdrawBtn.addEventListener('click', () => {
-    if (globalPool < 3000) {
-        Swal.fire('Insufficient Funds', 'The community pool is empty. Please contact Admin.', 'error');
-        return;
-    }
-
-    Swal.fire({
-        title: 'Confirm Withdrawal',
-        text: "You are about to withdraw ₦3,000 to your linked bank account.",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#15803d',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, Send it!'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            processTransaction();
-        }
-    });
-});
-
-function processTransaction() {
-    // 1. Deduct from Global Pool
-    globalPool -= 3000;
-    
-    // 2. Set user limit
-    userHasWithdrawnThisWeek = true;
-
-    // 3. Add to History
-    const now = new Date();
-    const newTx = {
-        amount: 3000,
-        date: now.toLocaleDateString(),
-        time: now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        status: 'Success'
-    };
-    transactions.unshift(newTx);
-
-    // 4. Show Success and Update UI
-    Swal.fire({
-        title: 'Transfer Successful!',
-        text: '₦3,000 has been sent to your bank account.',
-        icon: 'success',
-        timer: 3000
-    });
-
-    updateUI();
-}
-
-function renderHistory() {
-    if (transactions.length === 0) return;
-
-    historyList.innerHTML = transactions.map(tx => `
-        <div class="bg-white p-4 rounded-xl flex justify-between items-center shadow-sm border border-gray-100">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-green-100 text-green-700 rounded-full flex items-center justify-center">
-                    <i class="fa-solid fa-arrow-down"></i>
-                </div>
-                <div>
-                    <p class="font-bold text-gray-800">Weekly Allowance</p>
-                    <p class="text-xs text-gray-500">${tx.date} • ${tx.time}</p>
-                </div>
+    <div id="app" class="hidden min-h-screen">
+        <header class="p-6 flex justify-between items-center bg-white border-b">
+            <div>
+                <span id="user-dept-tag" class="dept-tag bg-green-100 text-green-700 mb-1 inline-block uppercase"></span>
+                <h2 class="font-bold text-gray-800" id="display-name">Student</h2>
             </div>
-            <p class="font-bold text-green-600">+₦${tx.amount.toLocaleString()}</p>
-        </div>
-    `).join('');
-}
+            <button onclick="logout()" class="text-gray-400"><i data-lucide="log-out" size="20"></i></button>
+        </header>
 
-// Run UI Update on Load
-updateUI();
+        <div class="p-6 max-w-md mx-auto">
+            <div class="mb-6 p-4 bg-blue-50 border border-blue-100 rounded-2xl flex justify-between items-center">
+                <div>
+                    <p class="text-[10px] font-bold text-blue-400 uppercase">Vault Balance</p>
+                    <h3 class="text-2xl font-black text-blue-900" id="pool-display">₦0.00</h3>
+                </div>
+                <button onclick="adminDeposit()" class="bg-blue-600 text-white p-2 rounded-lg tap-effect"><i data-lucide="plus"></i></button>
+            </div>
+
+            <div class="bg-gray-900 rounded-[32px] p-8 text-white mb-8 relative shadow-2xl overflow-hidden">
+                <div class="relative z-10">
+                    <p class="text-gray-400 text-sm font-bold uppercase tracking-widest mb-2">Weekly Grant</p>
+                    <h1 class="text-5xl font-black" id="allowance-text">₦3,000</h1>
+                    <div class="mt-8 flex items-center gap-2 text-xs text-green-400 font-bold">
+                        <div class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
+                        Ready for Disbursement
+                    </div>
+                </div>
+                <i data-lucide="zap" class="absolute -right-6 -bottom-6 text-white/5" size="180"></i>
+            </div>
+
+            <button id="withdraw-btn" onclick="requestWithdrawal()" class="w-full bg-green-600 text-white py-5 rounded-2xl font-bold text-lg shadow-xl shadow-green-100 tap-effect flex items-center justify-center gap-3">
+                <i data-lucide="arrow-down-right"></i>
+                CLAIM ₦3,000.00
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // REPLACE WITH YOUR FIREBASE CONFIG
+        const firebaseConfig = { 
+            apiKey: "AIzaSyC7ui6tasM3GgtetrLiqSO3qMbuzOvcdMU", 
+            projectId: "dgmarketplace-6ae42", 
+            appId: "1:650691092405:web:e174e43bf5b93d7f13c3fc" 
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        let user = null;
+        let globalPool = 0;
+
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // 1. Listen to Global Pool Realtime
+        db.collection("vault").doc("main_pool").onSnapshot((doc) => {
+            if (doc.exists) {
+                globalPool = doc.data().amount;
+                document.getElementById('pool-display').innerText = `₦${globalPool.toLocaleString()}`;
+            } else {
+                db.collection("vault").doc("main_pool").set({ amount: 0 });
+            }
+        });
+
+        async function handleLogin() {
+            const name = document.getElementById('username').value;
+            const dept = document.getElementById('dept').value;
+            const pass = document.getElementById('password').value;
+
+            if(!name || !dept || !pass) return Swal.fire('Error', 'Fill all fields', 'error');
+            
+            // Password logic (For real life, use a real auth system)
+            if(pass !== "admin123") return Swal.fire('Denied', 'Incorrect Password', 'error');
+
+            user = { name, dept, id: name.toLowerCase().replace(/\s/g, '') };
+            
+            // Check if user has withdrawn in database
+            const userDoc = await db.collection("students").doc(user.id).get();
+            user.hasWithdrawn = userDoc.exists ? userDoc.data().withdrawn : false;
+
+            showDashboard();
+        }
+
+        function showDashboard() {
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('app').classList.remove('hidden');
+            document.getElementById('display-name').innerText = user.name;
+            document.getElementById('user-dept-tag').innerText = user.dept;
+            
+            if(user.hasWithdrawn) {
+                disableWithdrawal();
+            }
+        }
+
+        async function requestWithdrawal() {
+            if(globalPool < 3000) return Swal.fire('Empty Vault', 'Wait for Admin deposit', 'warning');
+            
+            const result = await Swal.fire({
+                title: 'Withdraw ₦3k?',
+                text: `Transferring to ${user.name} (${user.dept})`,
+                showCancelButton: true,
+                confirmButtonColor: '#16a34a'
+            });
+
+            if(result.isConfirmed) {
+                // UPDATE FIREBASE (Atomically)
+                const batch = db.batch();
+                const poolRef = db.collection("vault").doc("main_pool");
+                const studentRef = db.collection("students").doc(user.id);
+
+                batch.update(poolRef, { amount: firebase.firestore.FieldValue.increment(-3000) });
+                batch.set(studentRef, { withdrawn: true, name: user.name, timestamp: firebase.firestore.FieldValue.serverTimestamp() });
+
+                await batch.commit();
+                
+                user.hasWithdrawn = true;
+                disableWithdrawal();
+                Swal.fire('Success!', 'Grant Disbursed', 'success');
+            }
+        }
+
+        function disableWithdrawal() {
+            document.getElementById('allowance-text').innerText = "₦0.00";
+            const btn = document.getElementById('withdraw-btn');
+            btn.disabled = true;
+            btn.classList.replace('bg-green-600', 'bg-gray-200');
+            btn.classList.replace('text-white', 'text-gray-400');
+            btn.innerText = "LIMIT REACHED";
+        }
+
+        // SECRET ADMIN FUNCTION
+        async function adminDeposit() {
+            const { value: amount } = await Swal.fire({
+                title: 'Deposit Funds',
+                input: 'number',
+                inputLabel: 'Amount in Naira',
+                showCancelButton: true
+            });
+            if (amount) {
+                await db.collection("vault").doc("main_pool").update({ 
+                    amount: firebase.firestore.FieldValue.increment(parseInt(amount)) 
+                });
+            }
+        }
+
+        function logout() { location.reload(); }
     </script>
-    <script src="app.js"></script>
 </body>
 </html>
